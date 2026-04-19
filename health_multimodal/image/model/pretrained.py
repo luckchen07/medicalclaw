@@ -18,9 +18,14 @@ from .types import ImageEncoderType, ImageEncoderWeightTypes
 
 
 JOINT_FEATURE_SIZE = 128
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+WEIGHT_ROOT = PROJECT_ROOT / "weight"
+BIOVIL_T_TEXT_WEIGHTS_DIR = WEIGHT_ROOT / "text_weight"
+BIOVIL_IMAGE_WEIGHTS_DIR = WEIGHT_ROOT / "image_weight"
 
 BIOMED_VLP_CXR_BERT_SPECIALIZED = "microsoft/BiomedVLP-CXR-BERT-specialized"
-BIOMED_VLP_BIOVIL_T = r"D:\python_workspace\MedicalClaw\text_weight"
+BIOMED_VLP_BIOVIL_T = str(BIOVIL_T_TEXT_WEIGHTS_DIR)
+BIOMED_VLP_BIOVIL_T_REPO = "microsoft/BiomedVLP-BioViL-T"
 HF_URL = "https://huggingface.co"
 
 CXR_BERT_COMMIT_TAG = "v1.1"
@@ -32,7 +37,7 @@ BIOVIL_IMAGE_WEIGHTS_MD5 = "02ce6ee460f72efd599295f440dbb453"
 
 BIOVIL_T_IMAGE_WEIGHTS_NAME = "biovil_t_image_model_proj_size_128.pt"
 BIOVIL_T_IMAGE_WEIGHTS_URL = (
-    f"{HF_URL}/{BIOMED_VLP_BIOVIL_T}/resolve/{BIOVIL_T_COMMIT_TAG}/{BIOVIL_T_IMAGE_WEIGHTS_NAME}"  # noqa: E501
+    f"{HF_URL}/{BIOMED_VLP_BIOVIL_T_REPO}/resolve/{BIOVIL_T_COMMIT_TAG}/{BIOVIL_T_IMAGE_WEIGHTS_NAME}"  # noqa: E501
 )
 BIOVIL_T_IMAGE_WEIGHTS_MD5 = "a83080e2f23aa584a4f2b24c39b1bb64"
 
@@ -42,14 +47,15 @@ def _download_biovil_image_model_weights() -> Path:
 
     More information available at https://huggingface.co/microsoft/BiomedVLP-CXR-BERT-specialized.
     """
-    root_dir = r"D:\python_workspace\MedicalClaw\image_weight"
+    root_dir = BIOVIL_IMAGE_WEIGHTS_DIR
+    root_dir.mkdir(parents=True, exist_ok=True)
     download_url(
         BIOVIL_IMAGE_WEIGHTS_URL,
-        root=root_dir,
+        root=str(root_dir),
         filename=BIOVIL_IMAGE_WEIGHTS_NAME,
         md5=BIOVIL_IMAGE_WEIGHTS_MD5,
     )
-    return Path(root_dir, BIOVIL_IMAGE_WEIGHTS_NAME)
+    return root_dir / BIOVIL_IMAGE_WEIGHTS_NAME
 
 
 def _download_biovil_t_image_model_weights() -> Path:
@@ -57,11 +63,15 @@ def _download_biovil_t_image_model_weights() -> Path:
 
     More information available at https://huggingface.co/microsoft/microsoft/BiomedVLP-BioViL-T.
     """
-    root_dir = r"D:\python_workspace\MedicalClaw\image_weight"
+    root_dir = BIOVIL_IMAGE_WEIGHTS_DIR
+    root_dir.mkdir(parents=True, exist_ok=True)
     download_url(
-        BIOVIL_T_IMAGE_WEIGHTS_URL, root=root_dir, filename=BIOVIL_T_IMAGE_WEIGHTS_NAME, md5=BIOVIL_T_IMAGE_WEIGHTS_MD5
+        BIOVIL_T_IMAGE_WEIGHTS_URL,
+        root=str(root_dir),
+        filename=BIOVIL_T_IMAGE_WEIGHTS_NAME,
+        md5=BIOVIL_T_IMAGE_WEIGHTS_MD5,
     )
-    return Path(root_dir, BIOVIL_T_IMAGE_WEIGHTS_NAME)
+    return root_dir / BIOVIL_T_IMAGE_WEIGHTS_NAME
 
 
 def get_biovil_image_encoder(pretrained: bool = True) -> ImageModel:

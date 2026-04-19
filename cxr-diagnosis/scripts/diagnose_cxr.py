@@ -12,6 +12,10 @@ from pathlib import Path
 from datetime import datetime
 import subprocess
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_CXR_DIR = PROJECT_ROOT / "CXR"
+DEFAULT_BIOVIL_SCRIPT = PROJECT_ROOT / "BioViL.py"
+
 # 设置UTF-8编码输出
 if sys.platform == 'win32':
     import io
@@ -240,8 +244,8 @@ def format_results(results: dict) -> str:
     return '\n'.join(output_lines)
 
 
-def main(cxr_dir: str = r"D:\CXR", 
-         biovil_script: str = r"D:\python_workspace\MedicalClaw\BioViL.py",
+def main(cxr_dir: str = str(DEFAULT_CXR_DIR),
+         biovil_script: str = str(DEFAULT_BIOVIL_SCRIPT),
          conda_env: str = "torch-gpu"):
     """
     主诊断流程
@@ -290,8 +294,8 @@ if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser(description='胸部X光诊断工具')
-    parser.add_argument('--cxr-dir', default=r'D:\CXR', help='CXR图片目录')
-    parser.add_argument('--biovil-script', default=r'D:\python_workspace\MedicalClaw\BioViL.py', help='BioViL脚本路径')
+    parser.add_argument('--cxr-dir', default=str(DEFAULT_CXR_DIR), help='CXR图片目录')
+    parser.add_argument('--biovil-script', default=str(DEFAULT_BIOVIL_SCRIPT), help='BioViL脚本路径')
     parser.add_argument('--conda-env', default='torch-gpu', help='Conda环境名称')
     
     args = parser.parse_args()
